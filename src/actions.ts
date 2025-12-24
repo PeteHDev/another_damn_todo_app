@@ -1,4 +1,5 @@
-import { writeToJSON, taskType } from "./utils.js";
+import fs from "fs";
+import { writeTasksToJSON, taskType, readTasksFromJSON } from "./utils.js";
 
 export function notEnoughArgsMsg() {
     console.log(
@@ -9,7 +10,19 @@ Possible actions: add, update, delete.`
 }
 
 export function add(task: string){
-    writeToJSON(task);
+    let tasks: taskType[] = readTasksFromJSON();
+    const newTask: taskType = {
+        id: tasks.length + 1,
+        description: task,
+    }
+    tasks.push(newTask);
+
+    try {
+        writeTasksToJSON(tasks);
+        console.log(`Task added successfully! (ID: ${newTask.id})`);
+    } catch (err) {
+        console.log("Error adding task: ", err);
+    }
 }
 
 export function list() {

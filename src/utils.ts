@@ -5,27 +5,24 @@ export type taskType = {
     description: string,
 };
 
-export function writeToJSON(task: string) {
+export function readTasksFromJSON(pathFile: string = "./tasks/tasks.json"): taskType[] {
+    let tasks: taskType[] = [];
+    if (fs.existsSync("./tasks/tasks.json")) {
+        try {
+            const data = fs.readFileSync("./tasks/tasks.json");
+            tasks = JSON.parse(data.toString());
+        } catch (err) {
+            console.error("Error reading tasks: ", err);
+        }
+    }
+
+    return tasks;
+}
+
+export function writeTasksToJSON(tasks: taskType[]) {
     if (!fs.existsSync("./tasks")) {
         fs.mkdirSync("./tasks");
     }
-    let tasks: taskType[] = [];
-
-    if (fs.existsSync("./tasks/tasks.json")) {
-        const data = fs.readFileSync("./tasks/tasks.json");
-        tasks = JSON.parse(data.toString());
-    }
-
-    const newTask: taskType = {
-        id: (tasks.length == 0) ? 1 : tasks.length + 1,
-        description: task,
-    };
-
-    tasks.push(newTask);
-    try {
-        fs.writeFileSync("./tasks/tasks.json", JSON.stringify(tasks, null, 4));
-        console.log(`Task added successfully! (ID: ${newTask.id})`);
-    } catch (err) {
-        console.error('Error adding task:', err);
-    }
+    
+    fs.writeFileSync("./tasks/tasks.json", JSON.stringify(tasks, null, 4));
 }

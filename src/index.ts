@@ -1,4 +1,3 @@
-import { taskType, writeToJSON } from "./utils.js";
 import { notEnoughArgsMsg, add, list } from "./actions.js"
 
 function main() {
