@@ -26,5 +26,8 @@ export function add(task: string){
 }
 
 export function list() {
-    console.log("PLACEHOLDER");
+    let tasks: taskType[] = readTasksFromJSON();
+    tasks.forEach((task) => {
+        console.log(`${task.id}. ${task.description}`);
+    });
 }
