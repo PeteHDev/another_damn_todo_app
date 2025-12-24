@@ -22,5 +22,10 @@ export function writeToJSON(task: string) {
     };
 
     tasks.push(newTask);
-    fs.writeFileSync("./tasks/tasks.json", JSON.stringify(tasks, null, 4));
+    try {
+        fs.writeFileSync("./tasks/tasks.json", JSON.stringify(tasks, null, 4));
+        console.log(`Task added successfully! (ID: ${newTask.id})`);
+    } catch (err) {
+        console.error('Error adding task:', err);
+    }
 }
