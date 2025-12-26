@@ -4,8 +4,8 @@ export type taskType = {
     id: number,
     description: string,
     status: string,
-    createdAt: Date,
-    updatedAt: Date,
+    createdAt: string,
+    updatedAt: string,
 };
 
 export function readTasksFromJSON(pathFile: string = "./tasks/tasks.json"): taskType[] {

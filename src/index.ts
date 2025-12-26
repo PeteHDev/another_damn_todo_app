@@ -4,7 +4,7 @@ function main() {
     const numOfArgs: number = process.argv.length;
     if (numOfArgs > 2) {
         if (process.argv[2] === "list") {
-            list();
+            list(process.argv);
             process.exit(0);
         } 
         
