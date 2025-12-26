@@ -5,7 +5,7 @@ import { time } from "console";
 export function notEnoughArgsMsg() {
     console.log(
 `Not enough arguments.
-Usage: npm start <action> <argument>.
+Usage: npm start <action> <argument>
 Possible actions: list, add, update, delete.`
 )
 }
@@ -50,11 +50,38 @@ export function list(argv: string[]) {
     let tasks: taskType[] = readTasksFromJSON();
     if (argv.length > 3 && argv[3] === "v") {
         tasks.forEach((task) => {
-            console.log(`${task.id}. ${task.status}\nCreated: ${task.createdAt}\nUpdated: ${task.updatedAt}\n${task.description}.\n`);
+            console.log(`${task.id}. ${task.status}\nCreated: ${task.createdAt}\nUpdated: ${task.updatedAt}\n${task.description}\n`);
         });
     } else {
         tasks.forEach((task) => {
-            console.log(`${task.id}. ${task.description}.`);
+            console.log(`${task.id}. ${task.description}`);
         });
     }
+}
+
+export function update(argv: string[]) {
+    if (argv.length < 4) {
+        console.error("Not enough arguments.\nUsage: npm start update <task ID> <desciption>");
+        return;
+    }
+
+    const id: number = Number(argv[3]) - 1;
+    if (!Number.isInteger(id)) {
+        console.error("ID must be an integer.");
+        return;
+    }
+
+    if (argv.length < 5) {
+        console.error("Updated description missing.\nUsage: npm start update <task ID> <desciption>");
+        return;
+    }
+
+    let tasks: taskType[] = readTasksFromJSON();
+    if (id < 0 || id >= tasks.length) {
+        console.error("Task update failed. ID missing.");
+        return;
+    }
+    tasks[id].description = argv[4];
+    writeTasksToJSON(tasks);
+    console.log(`Task updated successfully. (ID: ${id})`);
 }

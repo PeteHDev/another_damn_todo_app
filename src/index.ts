@@ -1,4 +1,4 @@
-import { notEnoughArgsMsg, add, list } from "./actions.js"
+import { notEnoughArgsMsg, add, list, update } from "./actions.js"
 
 function main() {
     const numOfArgs: number = process.argv.length;
@@ -10,6 +10,11 @@ function main() {
         
         if (process.argv[2] === "add") {
             add(process.argv);
+            process.exit(0);
+        }
+
+        if (process.argv[2] === "update") {
+            update(process.argv);
             process.exit(0);
         }
     }
