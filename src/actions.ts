@@ -48,7 +48,13 @@ export function add(argv: string[]){
 
 export function list(argv: string[]) {
     let tasks: taskType[] = readTasksFromJSON();
-    tasks.forEach((task) => {
-        console.log(`${task.id}. ${task.description}, ${task.createdAt}`);
-    });
+    if (argv.length > 3 && argv[3] === "v") {
+        tasks.forEach((task) => {
+            console.log(`${task.id}. ${task.status}\nCreated: ${task.createdAt}\nUpdated: ${task.updatedAt}\n${task.description}.\n`);
+        });
+    } else {
+        tasks.forEach((task) => {
+            console.log(`${task.id}. ${task.description}.`);
+        });
+    }
 }
