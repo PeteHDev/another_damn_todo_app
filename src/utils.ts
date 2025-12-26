@@ -3,6 +3,9 @@ import fs from "fs";
 export type taskType = {
     id: number,
     description: string,
+    status: string,
+    createdAt: Date,
+    updatedAt: Date,
 };
 
 export function readTasksFromJSON(pathFile: string = "./tasks/tasks.json"): taskType[] {

@@ -6,8 +6,10 @@ function main() {
         if (process.argv[2] === "list") {
             list();
             process.exit(0);
-        } else if (numOfArgs > 3 && process.argv[2] === "add") {
-            add(process.argv[3]);
+        } 
+        
+        if (process.argv[2] === "add") {
+            add(process.argv);
             process.exit(0);
         }
     }

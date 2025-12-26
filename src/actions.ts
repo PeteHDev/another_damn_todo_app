@@ -1,19 +1,29 @@
 import fs from "fs";
 import { writeTasksToJSON, taskType, readTasksFromJSON } from "./utils.js";
+import { time } from "console";
 
 export function notEnoughArgsMsg() {
     console.log(
 `Not enough arguments.
-Usage: npm start <action> <argument> OR npm start list.
-Possible actions: add, update, delete.`
+Usage: npm start <action> <argument>.
+Possible actions: list, add, update, delete.`
 )
 }
 
-export function add(task: string){
+export function add(argv: string[]){
+    if (argv.length < 4) {
+        notEnoughArgsMsg();
+        return;
+    }
+
     let tasks: taskType[] = readTasksFromJSON();
+    const now: Date = new Date();
     const newTask: taskType = {
         id: tasks.length + 1,
-        description: task,
+        description: argv[3],
+        status: "todo",
+        createdAt: now,
+        updatedAt: now,
     }
     tasks.push(newTask);
 
