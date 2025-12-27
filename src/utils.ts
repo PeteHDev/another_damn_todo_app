@@ -1,7 +1,6 @@
 import fs from "fs";
 
 export type taskType = {
-    id: number,
     description: string,
     status: string,
     createdAt: string,

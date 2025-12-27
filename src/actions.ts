@@ -28,7 +28,6 @@ export function add(argv: string[]){
         }
     );
     const newTask: taskType = {
-        id: tasks.length + 1,
         description: argv[3],
         status: "todo",
         createdAt: timeStamp,
@@ -38,7 +37,7 @@ export function add(argv: string[]){
 
     try {
         writeTasksToJSON(tasks);
-        console.log(`Task added successfully! (ID: ${newTask.id})`);
+        console.log(`Task added successfully! (ID: ${tasks.length})`);
     } catch (err) {
         console.log("Error adding task: ", err);
     }
@@ -63,13 +62,13 @@ export function list(argv: string[]) {
     }
 
     if (status === "any") {
-        tasks.forEach((task) => {
-            printTask(task, verbose);
+        tasks.forEach((task, id) => {
+            printTask(id + 1, task, verbose);
         });
     } else {
-        tasks.forEach((task) => {
+        tasks.forEach((task, id) => {
             if (task.status === status) {
-                printTask(task, verbose);
+                printTask(id + 1, task, verbose);
             }
         });
     }
@@ -109,17 +108,46 @@ export function update(argv: string[]) {
             minute: "2-digit",
         }
     );
-    
+
     tasks[id].description = argv[4];
     tasks[id].updatedAt = timeStamp;
     writeTasksToJSON(tasks);
-    console.log(`Task updated successfully. (ID: ${id})`);
+    console.log(`Task updated successfully. (ID: ${id + 1})`);
 }
 
-function printTask(task: taskType, verbose: boolean = false) {
+export function mark(argv: string[]) {
+    if (argv.length != 5) {
+        console.error("Not enough arguments.\nUsage: npm start mark <task ID> <status>");
+        return;
+    }
+
+    const id: number = Number(argv[3]) - 1;
+    if (!Number.isInteger(id)) {
+        console.error("ID must be an integer.");
+        return;
+    }
+
+    const newStatus: string = argv[4];
+    const allowedStatuses: string[] = ["todo", "in-progress", "done"];
+    if (!allowedStatuses.includes(newStatus)) {
+        console.error("Invalid status. Allowed statuses: todo, in-progress, done");
+        return;
+    }
+
+    let tasks: taskType[] = readTasksFromJSON();
+    if (id < 0 || id >= tasks.length) {
+        console.error("Task mark failed. ID missing.");
+        return;
+    }
+    tasks[id].status = newStatus;
+    writeTasksToJSON(tasks);
+    console.log(`Task marked successfully. (ID: ${id + 1})`);
+}
+
+function printTask(id: number, task: taskType, verbose: boolean = false) {
     if (verbose) {
-        console.log(`${task.id}. ${task.description}\nStatus: ${task.status}\nCreated: ${task.createdAt}\nUpdated: ${task.updatedAt}\n`);
+        console.log(`${id}. ${task.description}\nStatus: ${task.status}\nCreated: ${task.createdAt}\nUpdated: ${task.updatedAt}\n`);
     } else {
-        console.log(`${task.id}. ${task.status}: ${task.description}`);
+        console.log(`${id}. ${task.status}: ${task.description}`);
     }
 }
