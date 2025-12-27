@@ -97,7 +97,21 @@ export function update(argv: string[]) {
         console.error("Task update failed. ID missing.");
         return;
     }
+    const now: Date = new Date();
+    const timeStamp: string = now.toLocaleString(
+        "UTC", 
+        {
+            year: "numeric",
+            month: "long",
+            day: "2-digit",
+            weekday: "short",
+            hour: "2-digit",
+            minute: "2-digit",
+        }
+    );
+    
     tasks[id].description = argv[4];
+    tasks[id].updatedAt = timeStamp;
     writeTasksToJSON(tasks);
     console.log(`Task updated successfully. (ID: ${id})`);
 }
