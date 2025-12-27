@@ -116,7 +116,7 @@ export function update(argv: string[]) {
 }
 
 export function mark(argv: string[]) {
-    if (argv.length != 5) {
+    if (argv.length !== 5) {
         console.error("Not enough arguments.\nUsage: npm start mark <task ID> <status>");
         return;
     }
@@ -142,6 +142,28 @@ export function mark(argv: string[]) {
     tasks[id].status = newStatus;
     writeTasksToJSON(tasks);
     console.log(`Task marked successfully. (ID: ${id + 1})`);
+}
+
+export function del(argv: string[]) {
+    if (argv.length !== 4) {
+        console.error("Not enough arguments.\nUsage: npm start delete <task ID>");
+        return;
+    }
+
+    const id: number = Number(argv[3]) - 1;
+    if (!Number.isInteger(id)) {
+        console.error("ID must be an integer.");
+        return;
+    }
+
+    let tasks: taskType[] = readTasksFromJSON();
+    if (id < 0 || id >= tasks.length) {
+        console.error("Task deletion failed. ID missing.");
+        return;
+    }
+    const newTasks: taskType[] = tasks.filter((el, index) => index !== id);
+    writeTasksToJSON(newTasks);
+    console.log(`Task deleted successfully. (ID: ${id + 1})`);
 }
 
 function printTask(id: number, task: taskType, verbose: boolean = false) {
